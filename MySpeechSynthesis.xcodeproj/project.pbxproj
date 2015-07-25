@@ -1,0 +1,357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D7F5B7E61B62E05F00EE2C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F5B7E51B62E05F00EE2C75 /* AppDelegate.swift */; };
+		D7F5B7E81B62E05F00EE2C75 /* SpeakingTextWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F5B7E71B62E05F00EE2C75 /* SpeakingTextWindow.swift */; };
+		D7F5B7EB1B62E05F00EE2C75 /* SpeakingTextWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7E91B62E05F00EE2C75 /* SpeakingTextWindow.xib */; };
+		D7F5B7ED1B62E05F00EE2C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7EC1B62E05F00EE2C75 /* Assets.xcassets */; };
+		D7F5B7F01B62E05F00EE2C75 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7EE1B62E05F00EE2C75 /* MainMenu.xib */; };
+		D7F5B7F81B62E34700EE2C75 /* SpeakingCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F5B7F71B62E34700EE2C75 /* SpeakingCharacterView.swift */; };
+		D7F5B8031B62E3A800EE2C75 /* Buster.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7FB1B62E3A800EE2C75 /* Buster.plist */; };
+		D7F5B8041B62E3A800EE2C75 /* BusterClosed.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7FC1B62E3A800EE2C75 /* BusterClosed.png */; };
+		D7F5B8051B62E3A800EE2C75 /* BusterIdle1.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7FD1B62E3A800EE2C75 /* BusterIdle1.png */; };
+		D7F5B8061B62E3A800EE2C75 /* BusterIdle2.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7FE1B62E3A800EE2C75 /* BusterIdle2.png */; };
+		D7F5B8071B62E3A800EE2C75 /* BusterIdle3.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B7FF1B62E3A800EE2C75 /* BusterIdle3.png */; };
+		D7F5B8081B62E3A800EE2C75 /* BusterIdle4.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8001B62E3A800EE2C75 /* BusterIdle4.png */; };
+		D7F5B8091B62E3A800EE2C75 /* BusterOpen.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8011B62E3A800EE2C75 /* BusterOpen.png */; };
+		D7F5B80A1B62E3A800EE2C75 /* BusterSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8021B62E3A800EE2C75 /* BusterSleep.png */; };
+		D7F5B8171B631EA200EE2C75 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8161B631EA200EE2C75 /* LICENSE.txt */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D7F5B7E21B62E05F00EE2C75 /* MySpeechSynthesis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySpeechSynthesis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7F5B7E51B62E05F00EE2C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D7F5B7E71B62E05F00EE2C75 /* SpeakingTextWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakingTextWindow.swift; sourceTree = "<group>"; };
+		D7F5B7EA1B62E05F00EE2C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SpeakingTextWindow.xib; sourceTree = "<group>"; };
+		D7F5B7EC1B62E05F00EE2C75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D7F5B7EF1B62E05F00EE2C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		D7F5B7F11B62E05F00EE2C75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7F5B7F71B62E34700EE2C75 /* SpeakingCharacterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakingCharacterView.swift; sourceTree = "<group>"; };
+		D7F5B7FB1B62E3A800EE2C75 /* Buster.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Buster.plist; sourceTree = "<group>"; };
+		D7F5B7FC1B62E3A800EE2C75 /* BusterClosed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterClosed.png; sourceTree = "<group>"; };
+		D7F5B7FD1B62E3A800EE2C75 /* BusterIdle1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterIdle1.png; sourceTree = "<group>"; };
+		D7F5B7FE1B62E3A800EE2C75 /* BusterIdle2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterIdle2.png; sourceTree = "<group>"; };
+		D7F5B7FF1B62E3A800EE2C75 /* BusterIdle3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterIdle3.png; sourceTree = "<group>"; };
+		D7F5B8001B62E3A800EE2C75 /* BusterIdle4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterIdle4.png; sourceTree = "<group>"; };
+		D7F5B8011B62E3A800EE2C75 /* BusterOpen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterOpen.png; sourceTree = "<group>"; };
+		D7F5B8021B62E3A800EE2C75 /* BusterSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterSleep.png; sourceTree = "<group>"; };
+		D7F5B80E1B63167000EE2C75 /* LICENSE-original.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "LICENSE-original.txt"; path = "MySpeechSynthesis/LICENSE-original.txt"; sourceTree = "<group>"; };
+		D7F5B80F1B63167100EE2C75 /* ReadMe-original.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ReadMe-original.md"; path = "MySpeechSynthesis/ReadMe-original.md"; sourceTree = "<group>"; };
+		D7F5B8101B63167100EE2C75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = MySpeechSynthesis/README.md; sourceTree = "<group>"; };
+		D7F5B8111B63167100EE2C75 /* SpeechDictionary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SpeechDictionary.xml; path = MySpeechSynthesis/SpeechDictionary.xml; sourceTree = "<group>"; };
+		D7F5B8161B631EA200EE2C75 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D7F5B7DF1B62E05F00EE2C75 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D7F5B7D91B62E05F00EE2C75 = {
+			isa = PBXGroup;
+			children = (
+				D7F5B8161B631EA200EE2C75 /* LICENSE.txt */,
+				D7F5B8101B63167100EE2C75 /* README.md */,
+				D7F5B80E1B63167000EE2C75 /* LICENSE-original.txt */,
+				D7F5B80F1B63167100EE2C75 /* ReadMe-original.md */,
+				D7F5B8111B63167100EE2C75 /* SpeechDictionary.xml */,
+				D7F5B7E41B62E05F00EE2C75 /* MySpeechSynthesis */,
+				D7F5B80B1B62E3DA00EE2C75 /* Resources */,
+				D7F5B7E31B62E05F00EE2C75 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D7F5B7E31B62E05F00EE2C75 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D7F5B7E21B62E05F00EE2C75 /* MySpeechSynthesis.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D7F5B7E41B62E05F00EE2C75 /* MySpeechSynthesis */ = {
+			isa = PBXGroup;
+			children = (
+				D7F5B7E51B62E05F00EE2C75 /* AppDelegate.swift */,
+				D7F5B7E71B62E05F00EE2C75 /* SpeakingTextWindow.swift */,
+				D7F5B7F71B62E34700EE2C75 /* SpeakingCharacterView.swift */,
+				D7F5B7F11B62E05F00EE2C75 /* Info.plist */,
+			);
+			path = MySpeechSynthesis;
+			sourceTree = "<group>";
+		};
+		D7F5B7FA1B62E3A800EE2C75 /* Buster */ = {
+			isa = PBXGroup;
+			children = (
+				D7F5B7FB1B62E3A800EE2C75 /* Buster.plist */,
+				D7F5B7FC1B62E3A800EE2C75 /* BusterClosed.png */,
+				D7F5B7FD1B62E3A800EE2C75 /* BusterIdle1.png */,
+				D7F5B7FE1B62E3A800EE2C75 /* BusterIdle2.png */,
+				D7F5B7FF1B62E3A800EE2C75 /* BusterIdle3.png */,
+				D7F5B8001B62E3A800EE2C75 /* BusterIdle4.png */,
+				D7F5B8011B62E3A800EE2C75 /* BusterOpen.png */,
+				D7F5B8021B62E3A800EE2C75 /* BusterSleep.png */,
+			);
+			name = Buster;
+			path = Characters/Buster;
+			sourceTree = "<group>";
+		};
+		D7F5B80B1B62E3DA00EE2C75 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D7F5B7EE1B62E05F00EE2C75 /* MainMenu.xib */,
+				D7F5B7E91B62E05F00EE2C75 /* SpeakingTextWindow.xib */,
+				D7F5B7EC1B62E05F00EE2C75 /* Assets.xcassets */,
+				D7F5B7FA1B62E3A800EE2C75 /* Buster */,
+			);
+			name = Resources;
+			path = MySpeechSynthesis;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D7F5B7E11B62E05F00EE2C75 /* MySpeechSynthesis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7F5B7F41B62E05F00EE2C75 /* Build configuration list for PBXNativeTarget "MySpeechSynthesis" */;
+			buildPhases = (
+				D7F5B7DE1B62E05F00EE2C75 /* Sources */,
+				D7F5B7DF1B62E05F00EE2C75 /* Frameworks */,
+				D7F5B7E01B62E05F00EE2C75 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MySpeechSynthesis;
+			productName = MySpeechSynthesis;
+			productReference = D7F5B7E21B62E05F00EE2C75 /* MySpeechSynthesis.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D7F5B7DA1B62E05F00EE2C75 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "OOPer (NAGATA, Atsuyuki)";
+				TargetAttributes = {
+					D7F5B7E11B62E05F00EE2C75 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = D7F5B7DD1B62E05F00EE2C75 /* Build configuration list for PBXProject "MySpeechSynthesis" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D7F5B7D91B62E05F00EE2C75;
+			productRefGroup = D7F5B7E31B62E05F00EE2C75 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D7F5B7E11B62E05F00EE2C75 /* MySpeechSynthesis */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D7F5B7E01B62E05F00EE2C75 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7F5B8171B631EA200EE2C75 /* LICENSE.txt in Resources */,
+				D7F5B8071B62E3A800EE2C75 /* BusterIdle3.png in Resources */,
+				D7F5B8051B62E3A800EE2C75 /* BusterIdle1.png in Resources */,
+				D7F5B8061B62E3A800EE2C75 /* BusterIdle2.png in Resources */,
+				D7F5B8041B62E3A800EE2C75 /* BusterClosed.png in Resources */,
+				D7F5B7ED1B62E05F00EE2C75 /* Assets.xcassets in Resources */,
+				D7F5B7EB1B62E05F00EE2C75 /* SpeakingTextWindow.xib in Resources */,
+				D7F5B8081B62E3A800EE2C75 /* BusterIdle4.png in Resources */,
+				D7F5B80A1B62E3A800EE2C75 /* BusterSleep.png in Resources */,
+				D7F5B7F01B62E05F00EE2C75 /* MainMenu.xib in Resources */,
+				D7F5B8091B62E3A800EE2C75 /* BusterOpen.png in Resources */,
+				D7F5B8031B62E3A800EE2C75 /* Buster.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D7F5B7DE1B62E05F00EE2C75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7F5B7E81B62E05F00EE2C75 /* SpeakingTextWindow.swift in Sources */,
+				D7F5B7F81B62E34700EE2C75 /* SpeakingCharacterView.swift in Sources */,
+				D7F5B7E61B62E05F00EE2C75 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		D7F5B7E91B62E05F00EE2C75 /* SpeakingTextWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D7F5B7EA1B62E05F00EE2C75 /* Base */,
+			);
+			name = SpeakingTextWindow.xib;
+			sourceTree = "<group>";
+		};
+		D7F5B7EE1B62E05F00EE2C75 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D7F5B7EF1B62E05F00EE2C75 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D7F5B7F21B62E05F00EE2C75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D7F5B7F31B62E05F00EE2C75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D7F5B7F51B62E05F00EE2C75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MySpeechSynthesis/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.MySpeechSynthesis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D7F5B7F61B62E05F00EE2C75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MySpeechSynthesis/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.MySpeechSynthesis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D7F5B7DD1B62E05F00EE2C75 /* Build configuration list for PBXProject "MySpeechSynthesis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7F5B7F21B62E05F00EE2C75 /* Debug */,
+				D7F5B7F31B62E05F00EE2C75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7F5B7F41B62E05F00EE2C75 /* Build configuration list for PBXNativeTarget "MySpeechSynthesis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7F5B7F51B62E05F00EE2C75 /* Debug */,
+				D7F5B7F61B62E05F00EE2C75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D7F5B7DA1B62E05F00EE2C75 /* Project object */;
+}
