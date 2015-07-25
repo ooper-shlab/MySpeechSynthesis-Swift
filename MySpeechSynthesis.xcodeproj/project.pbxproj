@@ -22,6 +22,7 @@
 		D7F5B8091B62E3A800EE2C75 /* BusterOpen.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8011B62E3A800EE2C75 /* BusterOpen.png */; };
 		D7F5B80A1B62E3A800EE2C75 /* BusterSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8021B62E3A800EE2C75 /* BusterSleep.png */; };
 		D7F5B8171B631EA200EE2C75 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B8161B631EA200EE2C75 /* LICENSE.txt */; };
+		D7F5B81F1B6321CB00EE2C75 /* SpeechDictionary.xml in Resources */ = {isa = PBXBuildFile; fileRef = D7F5B81B1B6321CB00EE2C75 /* SpeechDictionary.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,11 +42,11 @@
 		D7F5B8001B62E3A800EE2C75 /* BusterIdle4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterIdle4.png; sourceTree = "<group>"; };
 		D7F5B8011B62E3A800EE2C75 /* BusterOpen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterOpen.png; sourceTree = "<group>"; };
 		D7F5B8021B62E3A800EE2C75 /* BusterSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BusterSleep.png; sourceTree = "<group>"; };
-		D7F5B80E1B63167000EE2C75 /* LICENSE-original.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "LICENSE-original.txt"; path = "MySpeechSynthesis/LICENSE-original.txt"; sourceTree = "<group>"; };
-		D7F5B80F1B63167100EE2C75 /* ReadMe-original.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ReadMe-original.md"; path = "MySpeechSynthesis/ReadMe-original.md"; sourceTree = "<group>"; };
-		D7F5B8101B63167100EE2C75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = MySpeechSynthesis/README.md; sourceTree = "<group>"; };
-		D7F5B8111B63167100EE2C75 /* SpeechDictionary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SpeechDictionary.xml; path = MySpeechSynthesis/SpeechDictionary.xml; sourceTree = "<group>"; };
 		D7F5B8161B631EA200EE2C75 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D7F5B8181B6321CB00EE2C75 /* LICENSE-original.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LICENSE-original.txt"; sourceTree = "<group>"; };
+		D7F5B8191B6321CB00EE2C75 /* ReadMe-original.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "ReadMe-original.md"; sourceTree = "<group>"; };
+		D7F5B81A1B6321CB00EE2C75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D7F5B81B1B6321CB00EE2C75 /* SpeechDictionary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SpeechDictionary.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,10 +64,10 @@
 			isa = PBXGroup;
 			children = (
 				D7F5B8161B631EA200EE2C75 /* LICENSE.txt */,
-				D7F5B8101B63167100EE2C75 /* README.md */,
-				D7F5B80E1B63167000EE2C75 /* LICENSE-original.txt */,
-				D7F5B80F1B63167100EE2C75 /* ReadMe-original.md */,
-				D7F5B8111B63167100EE2C75 /* SpeechDictionary.xml */,
+				D7F5B81A1B6321CB00EE2C75 /* README.md */,
+				D7F5B8181B6321CB00EE2C75 /* LICENSE-original.txt */,
+				D7F5B8191B6321CB00EE2C75 /* ReadMe-original.md */,
+				D7F5B81B1B6321CB00EE2C75 /* SpeechDictionary.xml */,
 				D7F5B7E41B62E05F00EE2C75 /* MySpeechSynthesis */,
 				D7F5B80B1B62E3DA00EE2C75 /* Resources */,
 				D7F5B7E31B62E05F00EE2C75 /* Products */,
@@ -178,6 +179,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7F5B8171B631EA200EE2C75 /* LICENSE.txt in Resources */,
+				D7F5B81F1B6321CB00EE2C75 /* SpeechDictionary.xml in Resources */,
 				D7F5B8071B62E3A800EE2C75 /* BusterIdle3.png in Resources */,
 				D7F5B8051B62E3A800EE2C75 /* BusterIdle1.png in Resources */,
 				D7F5B8061B62E3A800EE2C75 /* BusterIdle2.png in Resources */,
@@ -350,6 +352,7 @@
 				D7F5B7F61B62E05F00EE2C75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
