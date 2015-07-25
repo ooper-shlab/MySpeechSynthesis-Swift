@@ -1,5 +1,5 @@
 MySpeechSynthesis
-A simple example of using NSSpeechSynthesis class for OS X
+A simple example of using NSSpeechSynthesis class for OS X.
 
 UI, functionality and method-class designs are taken from Apple's CocoaSpeechSynthesisExample sample code.
 https://developer.apple.com/library/mac/samplecode/CocoaSpeechSynthesisExample/Introduction/Intro.html#//apple_ref/doc/uid/DTS10001089

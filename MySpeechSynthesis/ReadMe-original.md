@@ -1,6 +1,6 @@
 # CocoaSpeechSynthesisExample
 
-## Description
+## Description 
 
 A Cocoa application using the Speech Synthesis API.
 
