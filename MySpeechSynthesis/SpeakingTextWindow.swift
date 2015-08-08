@@ -455,7 +455,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         // We want the text view the active view.  Also saves any parameters currently being edited.
         fWindow.makeFirstResponder(fSpokenTextView)
         
-        let success = speechSynthesizer.startSpeakingString(theViewText)
+        let success = speechSynthesizer.startSpeakingString(theViewText!)
         if success {
             // Update our vars
             fLastErrorCode = 0
@@ -521,14 +521,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         if theSelectedMenuIndex == 0 {
             // Use the default voice from preferences.
             // Our only choice is to close and reopen the speech channel to get the default voice.
-            if let defaultVoice = NSSpeechSynthesizer.defaultVoice() {
-                voice = defaultVoice
-            } else {
-                self.runAlertPanelWithTitle("createNewSpeechChannel",
-                    message: "Error in voicePopupSelected",
-                    buttonTitles: ["Oh?"])
-                return
-            }
+            voice = NSSpeechSynthesizer.defaultVoice()
         } else {
             // Use the voice the user selected.
             voice = NSSpeechSynthesizer.availableVoices()[sender.indexOfSelectedItem - 1]
