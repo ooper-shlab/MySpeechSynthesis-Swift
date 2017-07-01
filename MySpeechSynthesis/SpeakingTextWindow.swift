@@ -8,7 +8,7 @@
 
 import Cocoa
 
-typealias SRefCon = UnsafePointer<Void>
+typealias SRefCon = UnsafeRawPointer
 
 private let kWordCallbackParamPosition = "ParamPosition"
 private let kWordCallbackParamLength = "ParamLength"
@@ -68,7 +68,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     private var fCurrentlySpeaking: Bool = false
     private var fCurrentlyPaused: Bool = false
     private var fSavingToFile: Bool = false
-    private var fTextData: NSData!
+    private var fTextData: Data!
     private let fErrorFormatString: String = NSLocalizedString("Error #%d (0x%0X) returned.", comment: "Error #%d (0x%0X) returned.")
     
     // Getters/Setters
@@ -99,7 +99,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         super.init()
         // set our default window text
         kDefaultWindowTextString.withCString {p -> Void in
-            self.textData = NSData(bytes: p, length: Int(strlen(p)))
+            self.textData = Data(bytes: p, count: Int(strlen(p)))
         }
         self.textDataType = kPlainTextDataTypeString
         
@@ -119,16 +119,16 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Set our text data variable and update text in window if showing.
     ----------------------------------------------------------------------------------------*/
-    private var textData: NSData {
+    private var textData: Data {
         set(theData) {
             fTextData = theData
             // If the window is showing, update the text view.
             if fSpokenTextView != nil {
                 if self.textDataType == "RTF Document" {
-                    fSpokenTextView.replaceCharactersInRange(NSRange(0..<fSpokenTextView.string!.utf16.count), withRTF: self.textData)
+                    fSpokenTextView.replaceCharacters(in: NSRange(0..<fSpokenTextView.string!.utf16.count), withRTF: self.textData)
                 } else {
-                    fSpokenTextView.replaceCharactersInRange(NSRange(0..<fSpokenTextView.string!.utf16.count),
-                        withString: NSString(data: self.textData, encoding: NSUTF8StringEncoding)! as String)
+                    fSpokenTextView.replaceCharacters(in: NSRange(0..<fSpokenTextView.string!.utf16.count),
+                        with: NSString(data: self.textData, encoding: String.Encoding.utf8.rawValue)! as String)
                 }
             }
         }
@@ -139,7 +139,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         Returns autoreleased copy of text data.
         ----------------------------------------------------------------------------------------*/
         get {
-            return fTextData.copy() as! NSData
+            return fTextData
         }
     }
     
@@ -232,9 +232,9 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     ----------------------------------------------------------------------------------------*/
     private func updateSpeakingControlState() {
         // Update controls based on speaking state
-        fSaveAsFileButton.enabled = !fCurrentlySpeaking
-        fPauseContinueButton.enabled = fCurrentlySpeaking
-        fStartStopButton.enabled = !fCurrentlyPaused
+        fSaveAsFileButton.isEnabled = !fCurrentlySpeaking
+        fPauseContinueButton.isEnabled = fCurrentlySpeaking
+        fStartStopButton.isEnabled = !fCurrentlyPaused
         if fCurrentlySpeaking {
             fStartStopButton.title = NSLocalizedString("Stop Speaking", comment: "Stop Speaking")
             fPauseContinueButton.title = NSLocalizedString("Pause Speaking", comment: "Pause Speaking")
@@ -252,10 +252,10 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         
         // update parameter fields
         do {
-            fRateCurrentStaticField.doubleValue = try speechSynthesizer.objectForProperty(NSSpeechRateProperty).doubleValue!
-            fPitchBaseCurrentStaticField.doubleValue = try speechSynthesizer.objectForProperty(NSSpeechPitchBaseProperty).doubleValue!
-            fPitchModCurrentStaticField.doubleValue = try speechSynthesizer.objectForProperty(NSSpeechPitchModProperty).doubleValue!
-            fVolumeCurrentStaticField.doubleValue = try speechSynthesizer.objectForProperty(NSSpeechVolumeProperty).doubleValue!
+            fRateCurrentStaticField.doubleValue = try (speechSynthesizer.object(forProperty: NSSpeechRateProperty) as AnyObject).doubleValue!
+            fPitchBaseCurrentStaticField.doubleValue = try (speechSynthesizer.object(forProperty: NSSpeechPitchBaseProperty) as AnyObject).doubleValue!
+            fPitchModCurrentStaticField.doubleValue = try (speechSynthesizer.object(forProperty: NSSpeechPitchModProperty) as AnyObject).doubleValue!
+            fVolumeCurrentStaticField.doubleValue = try (speechSynthesizer.object(forProperty: NSSpeechVolumeProperty) as AnyObject).doubleValue!
         } catch _ {}
     }
     
@@ -265,7 +265,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     Highlights the word currently being spoken based on text position and text length
     provided in the word callback routine.
     ----------------------------------------------------------------------------------------*/
-    private func highlightWordWithRange(range: NSRange) {
+    private func highlightWordWithRange(_ range: NSRange) {
         let selectionPosition = range.location + fOffsetToSpokenText
         let wordLength = range.length
         
@@ -279,14 +279,14 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Displays an alert describing a text processing error provided in the error callback.
     ----------------------------------------------------------------------------------------*/
-    private func displayErrorAlertWithParams(params: [String: AnyObject]) {
-        let errorPosition = params[kErrorCallbackParamPosition]!.integerValue + fOffsetToSpokenText
-        let errorCode = params[kErrorCallbackParamError]!.integerValue
+    private func displayErrorAlertWithParams(_ params: [String: AnyObject]) {
+        let errorPosition = (params[kErrorCallbackParamPosition] as! Int) + fOffsetToSpokenText
+        let errorCode = params[kErrorCallbackParamError] as! Int
         
         if errorCode != fLastErrorCode {
             
             // Tell engine to pause while we display this dialog.
-            speechSynthesizer.pauseSpeakingAtBoundary(NSSpeechBoundary.ImmediateBoundary)
+            speechSynthesizer.pauseSpeaking(at: NSSpeechBoundary.immediateBoundary)
             
             // Select offending character
             fSpokenTextView.setSelectedRange(NSMakeRange(errorPosition, 1))
@@ -315,11 +315,11 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Displays an alert with information about a sync command in response to a sync callback.
     ----------------------------------------------------------------------------------------*/
-    func displaySyncAlertWithMessage(message: String) {
+    func displaySyncAlertWithMessage(_ message: String) {
         var theMessageStr = ""
         
         // Tell engine to pause while we display this dialog.
-        speechSynthesizer.pauseSpeakingAtBoundary(NSSpeechBoundary.ImmediateBoundary)
+        speechSynthesizer.pauseSpeaking(at: NSSpeechBoundary.immediateBoundary)
         
         // Display error alert and stop or continue based on user's desires
         let messageFormat = NSLocalizedString("Sync embedded command was discovered containing message '%@'.",
@@ -379,23 +379,23 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user clicks the "Start Speaking"/"Stop Speaking"
     button.	 We either start or stop speaking based on the current speaking state.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func startStopButtonPressed(sender: NSButton) {
+    @IBAction func startStopButtonPressed(_ sender: NSButton) {
         
         if fCurrentlySpeaking {
-            var whereToStop: NSSpeechBoundary = .ImmediateBoundary
+            var whereToStop: NSSpeechBoundary = .immediateBoundary
             
             // Grab where to stop at value from radio buttons
             if fAfterWordRadioButton.intValue != 0 {
-                whereToStop = .WordBoundary
+                whereToStop = .wordBoundary
             } else if fAfterSentenceRadioButton.intValue != 0 {
-                whereToStop = .SentenceBoundary
+                whereToStop = .sentenceBoundary
             }
-            if whereToStop == .ImmediateBoundary {
+            if whereToStop == .immediateBoundary {
                 // NOTE:	We could just call StopSpeechAt with kImmediate, but for test purposes
                 // we exercise the StopSpeech routine.
                 speechSynthesizer.stopSpeaking()
             } else {
-                speechSynthesizer.stopSpeakingAtBoundary(whereToStop)
+                speechSynthesizer.stopSpeaking(at: whereToStop)
             }
             
             fCurrentlySpeaking = false
@@ -411,14 +411,14 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user clicks the "Save As File" button.	 We ask user
     to specify where to save the file, then start speaking to this file.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func saveAsButtonPressed(sender: AnyObject) {
+    @IBAction func saveAsButtonPressed(_ sender: AnyObject) {
         
         let theSavePanel = NSSavePanel()
         
         theSavePanel.prompt = NSLocalizedString("Save", comment: "Save")
         theSavePanel.nameFieldStringValue = "Synthesized Speech.aiff"
         if theSavePanel.runModal() == NSFileHandlingPanelOKButton {
-            let selectedFileURL = theSavePanel.URL
+            let selectedFileURL = theSavePanel.url
             self.startSpeakingTextViewToURL(selectedFileURL)
         }
     }
@@ -429,7 +429,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     This method sets up the speech channel and begins the speech synthesis
     process, optionally speaking to a file instead playing through the speakers.
     ----------------------------------------------------------------------------------------*/
-    private func startSpeakingTextViewToURL(url: NSURL?) {
+    private func startSpeakingTextViewToURL(_ url: URL?) {
         var theViewText: String? = nil
         
         // Grab the selection substring, or if no selection then grab entire text.
@@ -438,7 +438,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
             theViewText = fSpokenTextView.string
             fOffsetToSpokenText = 0
         } else {
-            theViewText = (fSpokenTextView.string ?? "" as NSString).substringWithRange(fOrgSelectionRange)
+            theViewText = (fSpokenTextView.string as NSString? ?? "").substring(with: fOrgSelectionRange)
             fOffsetToSpokenText = fOrgSelectionRange.location
         }
         
@@ -455,7 +455,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         // We want the text view the active view.  Also saves any parameters currently being edited.
         fWindow.makeFirstResponder(fSpokenTextView)
         
-        let success = speechSynthesizer.startSpeakingString(theViewText!)
+        let success = speechSynthesizer.startSpeaking(theViewText!)
         if success {
             // Update our vars
             fLastErrorCode = 0
@@ -479,7 +479,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user clicks the "Pause Speaking"/"Continue Speaking"
     button.	 We either pause or continue speaking based on the current speaking state.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func pauseContinueButtonPressed(sender: AnyObject) {
+    @IBAction func pauseContinueButtonPressed(_ sender: AnyObject) {
         
         if fCurrentlyPaused {
             // We want the text view the active view.  Also saves any parameters currently being edited.
@@ -490,16 +490,16 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
             fCurrentlyPaused = false
             self.updateSpeakingControlState()
         } else {
-            var whereToPause: NSSpeechBoundary = .ImmediateBoundary
+            var whereToPause: NSSpeechBoundary = .immediateBoundary
             
             // Figure out where to stop from radio buttons
             if fAfterSentenceRadioButton.intValue != 0 {
-                whereToPause = .WordBoundary
+                whereToPause = .wordBoundary
             } else if fAfterSentenceRadioButton.intValue != 0 {
-                whereToPause = .SentenceBoundary
+                whereToPause = .sentenceBoundary
             }
             
-            speechSynthesizer.pauseSpeakingAtBoundary(whereToPause)
+            speechSynthesizer.pauseSpeaking(at: whereToPause)
             
             fCurrentlyPaused = true
             self.updateSpeakingControlState()
@@ -514,7 +514,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     speech channel cannot use the selected voice, we close and open new speech
     channel with the selecte voice.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func voicePopupSelected(sender: NSPopUpButton) {
+    @IBAction func voicePopupSelected(_ sender: NSPopUpButton) {
         let theSelectedMenuIndex = sender.indexOfSelectedItem
         
         let voice: String
@@ -524,7 +524,8 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
             voice = NSSpeechSynthesizer.defaultVoice()
         } else {
             // Use the voice the user selected.
-            voice = NSSpeechSynthesizer.availableVoices()[sender.indexOfSelectedItem - 1]
+            Swift.print("index=",sender.indexOfSelectedItem)
+            voice = NSSpeechSynthesizer.availableVoices()[sender.indexOfSelectedItem - 2]
         }
         speechSynthesizer.setVoice(voice)
         self.selectedVoice = voice
@@ -538,7 +539,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user checks/unchecks the Character-By-Character
     mode checkbox.	We tell the speech channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func charByCharCheckboxSelected(sender: AnyObject) {
+    @IBAction func charByCharCheckboxSelected(_ sender: AnyObject) {
         
         do {
             if fCharByCharCheckboxButton.intValue != 0 {
@@ -559,7 +560,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user checks/unchecks the Digit-By-Digit
     mode checkbox.	We tell the speech channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func digitByDigitCheckboxSelected(sender: AnyObject) {
+    @IBAction func digitByDigitCheckboxSelected(_ sender: AnyObject) {
         
         do {
             if fDigitByDigitCheckboxButton.intValue != 0 {
@@ -580,7 +581,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user checks/unchecks the Phoneme input
     mode checkbox.	We tell the speech channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func phonemeModeCheckboxSelected(sender:AnyObject) {
+    @IBAction func phonemeModeCheckboxSelected(_ sender:AnyObject) {
         
         do {
             if fPhonemeModeCheckboxButton.intValue != 0 {
@@ -602,19 +603,19 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     the speech channel for a phoneme representation of the window text then save the
     result to a text file at a location determined by the user.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func dumpPhonemesSelected(sender: AnyObject) {
+    @IBAction func dumpPhonemesSelected(_ sender: AnyObject) {
         let panel = NSSavePanel()
         
-        if panel.runModal() != 0 && panel.URL != nil {
+        if panel.runModal() != 0 && panel.url != nil {
             // Get and speech text
-            let phonemesString = speechSynthesizer.phonemesFromText(fSpokenTextView.string!)
+            let phonemesString = speechSynthesizer.phonemes(from: fSpokenTextView.string!)
             do {
-                try phonemesString.writeToURL(panel.URL!, atomically: true, encoding: NSUTF8StringEncoding)
+                try phonemesString.write(to: panel.url!, atomically: true, encoding: String.Encoding.utf8)
             } catch let nsError as NSError {
                 let messageFormat = NSLocalizedString("writeToURL: '%@' error: %@",
                     comment: "writeToURL: '%@' error: %@")
                 self.runAlertPanelWithTitle("CopyPhonemesFromText",
-                    message: String(format: messageFormat, panel.URL!, nsError),
+                    message: String(format: messageFormat, panel.url! as CVarArg, nsError),
                     buttonTitles: ["Oh?"])
             }
         }
@@ -625,7 +626,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     An action method called when the user clicks the "Use Dictionary…" button.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func useDictionarySelected(sender: AnyObject) {
+    @IBAction func useDictionarySelected(_ sender: AnyObject) {
         // Open file.
         let panel = NSOpenPanel()
         
@@ -635,15 +636,15 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         panel.allowsMultipleSelection = true
         
         if panel.runModal() != 0 {
-            for fileURL in panel.URLs {
+            for fileURL in panel.urls {
                 // Read dictionary file into NSData object.
-                if let speechDictionary = NSDictionary(contentsOfURL: fileURL) as? [String: AnyObject] {
+                if let speechDictionary = NSDictionary(contentsOf: fileURL) as? [String: AnyObject] {
                     speechSynthesizer.addSpeechDictionary(speechDictionary)
                 } else {
                     let messageFormat = NSLocalizedString("dictionaryWithContentsOfURL:'%@' returned NULL",
                         comment: "dictionaryWithContentsOfURL:'%@' returned NULL")
                     self.runAlertPanelWithTitle("CopyPhonemesFromText",
-                        message: String(format: messageFormat, fileURL.path!),
+                        message: String(format: messageFormat, fileURL.path),
                         buttonTitles: ["Oh?"])
                 }
             }
@@ -656,7 +657,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user changes the rate field.  We tell the speech
     channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func rateChanged(sender: AnyObject) {
+    @IBAction func rateChanged(_ sender: AnyObject) {
         speechSynthesizer.rate = fRateDefaultEditableField.floatValue
     }
     
@@ -666,7 +667,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user changes the pitch base field.	 We tell the speech
     channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func pitchBaseChanged(sender: AnyObject) {
+    @IBAction func pitchBaseChanged(_ sender: AnyObject) {
         do {
             try speechSynthesizer.setObject(fPitchBaseDefaultEditableField.doubleValue, forProperty: NSSpeechPitchBaseProperty)
             fPitchBaseCurrentStaticField.doubleValue = fPitchBaseDefaultEditableField.doubleValue
@@ -683,7 +684,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user changes the pitch modulation field.  We tell
     the speech channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func pitchModChanged(sender: AnyObject) {
+    @IBAction func pitchModChanged(_ sender: AnyObject) {
         do {
             try speechSynthesizer.setObject(fPitchModDefaultEditableField.doubleValue, forProperty: NSSpeechPitchModProperty)
             fPitchModCurrentStaticField.doubleValue = fPitchModDefaultEditableField.doubleValue
@@ -700,7 +701,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user changes the volume field.	 We tell
     the speech channel to use this setting.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func volumeChanged(sender: AnyObject) {
+    @IBAction func volumeChanged(_ sender: AnyObject) {
         speechSynthesizer.volume = fVolumeDefaultEditableField.floatValue
     }
     
@@ -710,7 +711,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     An action method called when the user clicks the Use Defaults button.  We tell
     the speech channel to use this the default settings.
     ----------------------------------------------------------------------------------------*/
-    @IBAction func resetSelected(sender: AnyObject) {
+    @IBAction func resetSelected(_ sender: AnyObject) {
         do {
             try speechSynthesizer.setObject(nil, forProperty: NSSpeechResetProperty)
             self.fillInEditableParameterFields()
@@ -721,13 +722,13 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         }
     }
     
-    @IBAction func wordCallbacksButtonPressed(sender: AnyObject) {
+    @IBAction func wordCallbacksButtonPressed(_ sender: AnyObject) {
         if fHandleWordCallbacksCheckboxButton.intValue == 0 {
             fSpokenTextView.setSelectedRange(fOrgSelectionRange)
         }
     }
     
-    @IBAction func phonemeCallbacksButtonPressed(sender: AnyObject) {
+    @IBAction func phonemeCallbacksButtonPressed(_ sender: AnyObject) {
         if fHandlePhonemeCallbacksCheckboxButton.intValue != 0 {
             characterView?.setExpression(.Idle)
         } else {
@@ -740,13 +741,13 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Updates controls in the Option tab panel based on the passed speakingNow flag.
     ----------------------------------------------------------------------------------------*/
-    private func enableOptionsForSpeakingState(speakingNow: Bool) {
-        fVoicesPopUpButton.enabled = !speakingNow
-        fCharByCharCheckboxButton.enabled = !speakingNow
-        fDigitByDigitCheckboxButton.enabled = !speakingNow
-        fPhonemeModeCheckboxButton.enabled = !speakingNow
-        fDumpPhonemesButton.enabled = !speakingNow
-        fUseDictionaryButton.enabled = !speakingNow
+    private func enableOptionsForSpeakingState(_ speakingNow: Bool) {
+        fVoicesPopUpButton.isEnabled = !speakingNow
+        fCharByCharCheckboxButton.isEnabled = !speakingNow
+        fDigitByDigitCheckboxButton.isEnabled = !speakingNow
+        fPhonemeModeCheckboxButton.isEnabled = !speakingNow
+        fDumpPhonemesButton.isEnabled = !speakingNow
+        fUseDictionaryButton.isEnabled = !speakingNow
     }
     
     /*----------------------------------------------------------------------------------------
@@ -754,12 +755,12 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Updates controls in the Callback tab panel based on the passed savingToFile flag.
     ----------------------------------------------------------------------------------------*/
-    private func enableCallbackControlsBasedOnSavingToFileFlag(savingToFile: Bool) {
-        fHandleWordCallbacksCheckboxButton.enabled = !savingToFile
-        fHandlePhonemeCallbacksCheckboxButton.enabled = !savingToFile
-        fHandleSyncCallbacksCheckboxButton.enabled = !savingToFile
-        fHandleErrorCallbacksCheckboxButton.enabled = !savingToFile
-        fHandleTextDoneCallbacksCheckboxButton.enabled = false//!savingToFile
+    private func enableCallbackControlsBasedOnSavingToFileFlag(_ savingToFile: Bool) {
+        fHandleWordCallbacksCheckboxButton.isEnabled = !savingToFile
+        fHandlePhonemeCallbacksCheckboxButton.isEnabled = !savingToFile
+        fHandleSyncCallbacksCheckboxButton.isEnabled = !savingToFile
+        fHandleErrorCallbacksCheckboxButton.isEnabled = !savingToFile
+        fHandleTextDoneCallbacksCheckboxButton.isEnabled = false//!savingToFile
         if savingToFile || fHandlePhonemeCallbacksCheckboxButton.intValue == 0 {
             characterView?.setExpression(.Sleep)
         } else {
@@ -782,7 +783,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         fRateCurrentStaticField.doubleValue = tempDoubleValue
         
         do {
-            tempDoubleValue = try speechSynthesizer.objectForProperty(NSSpeechPitchBaseProperty).doubleValue!
+            tempDoubleValue = try (speechSynthesizer.object(forProperty: NSSpeechPitchBaseProperty) as AnyObject).doubleValue!
         } catch _ {
             tempDoubleValue = 0.0
         }
@@ -790,7 +791,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         fPitchBaseCurrentStaticField.doubleValue = tempDoubleValue
         
         do {
-            tempDoubleValue = try speechSynthesizer.objectForProperty(NSSpeechPitchModProperty).doubleValue!
+            tempDoubleValue = try (speechSynthesizer.object(forProperty: NSSpeechPitchModProperty) as AnyObject).doubleValue!
         } catch _ {
             tempDoubleValue = 0.0
         }
@@ -863,18 +864,18 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         
         // Delete the existing voices from the bottom of the menu.
         while fVoicesPopUpButton.numberOfItems > 2 {
-            fVoicesPopUpButton.removeItemAtIndex(2)
+            fVoicesPopUpButton.removeItem(at: 2)
         }
         
         // Ask TTS API for each available voicez
         let voices = NSSpeechSynthesizer.availableVoices()
-        for (voiceIndex, voice) in voices.enumerate() {
-            let voiceAttr = NSSpeechSynthesizer.attributesForVoice(voice)
+        for (voiceIndex, voice) in voices.enumerated() {
+            let voiceAttr = NSSpeechSynthesizer.attributes(forVoice: voice)
             let theVoiceName = voiceAttr[NSVoiceName] as! String? ?? voice
-            fVoicesPopUpButton.addItemWithTitle(theVoiceName)
+            fVoicesPopUpButton.addItem(withTitle: theVoiceName)
             // Selected this item if it matches our default voice spec.
             if voice == self.selectedVoice {
-                fVoicesPopUpButton.selectItemAtIndex(Int(voiceIndex) + 1)
+                fVoicesPopUpButton.selectItem(at: Int(voiceIndex) + 2)
                 voiceFoundAndSelected = true
             }
         }
@@ -883,7 +884,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
             // Update our object fields with the first voice
             self.selectedVoice = NSSpeechSynthesizer.defaultVoice()
             
-            fVoicesPopUpButton.selectItemAtIndex(0)
+            fVoicesPopUpButton.selectItem(at: 0)
         }
         
         // Create Speech Channel configured with our desired options and callbacks
@@ -892,10 +893,10 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         self.fillInEditableParameterFields()
         
         // Enable buttons appropriatelly
-        fStartStopButton.enabled = true
-        fPauseContinueButton.enabled = false
-        fSaveAsFileButton.enabled = true
-        fHandleTextDoneCallbacksCheckboxButton.enabled = false //###
+        fStartStopButton.isEnabled = true
+        fPauseContinueButton.isEnabled = false
+        fSaveAsFileButton.isEnabled = true
+        fHandleTextDoneCallbacksCheckboxButton.isEnabled = false //###
         
         // Set starting expresison on animated character
         self.phonemeCallbacksButtonPressed(fHandlePhonemeCallbacksCheckboxButton)
@@ -917,14 +918,14 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     Part of the NSDocument support. Called by NSDocument after the nib has been loaded
     to udpate window as appropriate.
     ----------------------------------------------------------------------------------------*/
-    override func windowControllerDidLoadNib(aController: NSWindowController) {
+    override func windowControllerDidLoadNib(_ aController: NSWindowController) {
         super.windowControllerDidLoadNib(aController)
         // Update the window text from data
         if self.textDataType == "RTF Document" {
-            fSpokenTextView.replaceCharactersInRange(NSRange(0..<fSpokenTextView.string!.utf16.count), withRTF: self.textData)
+            fSpokenTextView.replaceCharacters(in: NSRange(0..<fSpokenTextView.string!.utf16.count), withRTF: self.textData)
         } else {
-            fSpokenTextView.replaceCharactersInRange(NSRange(0..<fSpokenTextView.string!.utf16.count),
-                withString: NSString(data: self.textData, encoding: NSUTF8StringEncoding)! as String)
+            fSpokenTextView.replaceCharacters(in: NSRange(0..<fSpokenTextView.string!.utf16.count),
+                with: NSString(data: self.textData, encoding: String.Encoding.utf8.rawValue)! as String)
         }
     }
     
@@ -936,12 +937,12 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Part of the NSDocument support. Called by NSDocument to wrote the document.
     ----------------------------------------------------------------------------------------*/
-    override func dataOfType(aType: String) throws -> NSData {
+    override func data(ofType aType: String) throws -> Data {
         // Write text to file.
         if aType == "RTF Document" {
-            self.textData = fSpokenTextView.RTFFromRange(NSRange(0..<fSpokenTextView.string!.utf16.count))!
+            self.textData = fSpokenTextView.rtf(from: NSRange(0..<fSpokenTextView.string!.utf16.count))!
         } else {
-            self.textData = NSData(bytes: fSpokenTextView.string!, length: fSpokenTextView.string!.utf8.count)
+            self.textData = Data(bytes: UnsafePointer<UInt8>(fSpokenTextView.string!), count: fSpokenTextView.string!.utf8.count)
         }
         
         return self.textData
@@ -952,7 +953,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Part of the NSDocument support. Called by NSDocument to read the document.
     ----------------------------------------------------------------------------------------*/
-    override func readFromData(data: NSData, ofType aType: String) throws {
+    override func read(from data: Data, ofType aType: String) throws {
         // Read the opened file.
         self.textData = data
         self.textDataType = aType
@@ -965,7 +966,8 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     /*----------------------------------------------------------------------------------------
     simple replacement method for NSRunAlertPanel
     ----------------------------------------------------------------------------------------*/
-    private func runAlertPanelWithTitle(inTitle: String,
+    @discardableResult
+    private func runAlertPanelWithTitle(_ inTitle: String,
         message inMessage: String,
         buttonTitles inButtonTitles: [String]) -> NSModalResponse
     {
@@ -973,7 +975,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
         alert.messageText = NSLocalizedString(inTitle, comment: inTitle)
         alert.informativeText = NSLocalizedString(inMessage, comment: inMessage)
         for buttonTitle in inButtonTitles {
-            alert.addButtonWithTitle(NSLocalizedString(buttonTitle, comment: buttonTitle))
+            alert.addButton(withTitle: NSLocalizedString(buttonTitle, comment: buttonTitle))
         }
         return alert.runModal()
     }
@@ -1003,10 +1005,10 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Called by speech channel when an error occurs during processing of text to speak.
     ----------------------------------------------------------------------------------------*/
-    func speechSynthesizer(sender: NSSpeechSynthesizer, didEncounterErrorAtIndex characterIndex: Int, ofString string: String, message: String) {
+    func speechSynthesizer(_ sender: NSSpeechSynthesizer, didEncounterErrorAt characterIndex: Int, of string: String, message: String) {
         autoreleasepool {
             if self.shouldDisplayErrorCallbacks {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     let alert = NSAlert()
                     alert.messageText = message
                     alert.runModal()
@@ -1020,9 +1022,9 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     
     Called by speech channel when all speech has been generated.
     ----------------------------------------------------------------------------------------*/
-    func speechSynthesizer(sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
+    func speechSynthesizer(_ sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
         autoreleasepool {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.speechIsDone()
             }
         }
@@ -1034,10 +1036,10 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     Called by speech channel when it encouters a synchronization command within an
     embedded speech comand in text being processed.
     ----------------------------------------------------------------------------------------*/
-    func speechSynthesizer(sender: NSSpeechSynthesizer, didEncounterSyncMessage message: String) {
+    func speechSynthesizer(_ sender: NSSpeechSynthesizer, didEncounterSyncMessage message: String) {
         autoreleasepool {
             if self.shouldDisplaySyncCallbacks {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     self.displaySyncAlertWithMessage(message)
                 }
             }
@@ -1050,11 +1052,11 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     Called by speech channel every time a phoneme is about to be generated.	 You might use
     this to animate a speaking character.
     ----------------------------------------------------------------------------------------*/
-    func speechSynthesizer(sender: NSSpeechSynthesizer, willSpeakPhoneme phonemeOpcode: Int16) {
+    func speechSynthesizer(_ sender: NSSpeechSynthesizer, willSpeakPhoneme phonemeOpcode: Int16) {
         autoreleasepool {
             if self.shouldDisplayPhonemeCallbacks {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.characterView.setExpressionForPhoneme(Int(phonemeOpcode))
+                DispatchQueue.main.async {
+                    self.characterView.setExpressionForPhoneme(phonemeOpcode as NSNumber)
                 }
             }
         }
@@ -1066,10 +1068,10 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     Called by speech channel every time a word is about to be generated.  This program
     uses this callback to highlight the currently spoken word.
     ----------------------------------------------------------------------------------------*/
-    func speechSynthesizer(sender: NSSpeechSynthesizer, willSpeakWord characterRange: NSRange, ofString string: String) {
+    func speechSynthesizer(_ sender: NSSpeechSynthesizer, willSpeakWord characterRange: NSRange, of string: String) {
         autoreleasepool {
             if self.shouldDisplayWordCallbacks {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     self.highlightWordWithRange(characterRange)
                 }
             }
