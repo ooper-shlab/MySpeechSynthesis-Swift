@@ -138,7 +138,7 @@ class SpeakingCharacterView: NSView {
     Determines the next frame to animate, loads the image and forces it to be drawn.  If
     the expression contains multiple frames, sets up timer for the next frame to be drawn.
     ----------------------------------------------------------------------------------------*/
-    func animateNextExpressionFrame() {
+    @objc func animateNextExpressionFrame() {
         _expressionFrameTimer = nil
         
         guard _curFrameArray.count > 0 else {return} //###
