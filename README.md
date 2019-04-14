@@ -13,7 +13,7 @@ Created by OOPer in cooperation with shlab.jp, on 2015/7/25.
 ===========================================================================
 BUILD REQUIREMENTS:
 
-Xcode 9.1
+Xcode 10.2
 
 ===========================================================================
 RUNTIME REQUIREMENTS:

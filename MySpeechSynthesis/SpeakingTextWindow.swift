@@ -909,7 +909,7 @@ class SpeakingTextWindow: NSDocument, NSSpeechSynthesizerDelegate {
     the document.
     ----------------------------------------------------------------------------------------*/
     override var windowNibName: NSNib.Name? {
-        return NSNib.Name("SpeakingTextWindow")
+        return "SpeakingTextWindow"
     }
     
     /*----------------------------------------------------------------------------------------
